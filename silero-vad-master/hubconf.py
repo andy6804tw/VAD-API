@@ -21,10 +21,13 @@ def silero_vad(onnx=False):
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
     hub_dir = torch.hub.get_dir()
+    import os
+    print("Current working directory: {0}".format(os.getcwd()))
     if onnx:
         model = OnnxWrapper(f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.onnx')
     else:
-        model = init_jit_model(model_path=f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.jit')
+#         model = init_jit_model(model_path=f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.jit')
+        model = init_jit_model(model_path=f'./silero-vad-master/files/silero_vad.jit')
     utils = (get_speech_timestamps,
              save_audio,
              read_audio,
