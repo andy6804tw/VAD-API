@@ -7,11 +7,11 @@ import librosa
 import speech_recognition as sr
 import numpy as np
 
-## download to .cache folder
+# download to .cache folder
 # model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
 #                               model='silero_vad',
 #                               force_reload=True)
-## run local by path to a local directory
+# run local by path to a local directory
 model, utils = torch.hub.load(repo_or_dir='silero-vad-master',
                               model='silero_vad',
                               source = 'local',
@@ -31,8 +31,26 @@ def byte2Wav(binaryFile):
     waveform_16k = librosa.resample(data.astype('float'), orig_sr=samplerate, target_sr=16000)
     return waveform_16k
 
-def getASRResult(waveform_16k, vadResult):
+def base64String2Wav(base64String):
+    # 將 base64 字串轉成 byte 格式
+    decoded_data = base64.b64decode(base64String)
+    # 讀取二進位檔並取得 waveform 與 sample rate
+    samplerate, data = read(io.BytesIO(decoded_data))
+    print(samplerate, data)
+    # Resample data
+    waveform_16k = librosa.resample(data.astype('float'), orig_sr=samplerate, target_sr=16000)
+    return waveform_16k
     
+
+def getASRResult(waveform_16k, vadResult):
+    """
+    取得ASR語音辨識結果
+    Args:
+        waveform_16k(ndarray): 單聲道音訊 waveform 矩陣
+        vadResult(ndarray): VAD 結果
+    Return:
+        回傳每段聲音ASR辨識結果: {"result": [{"start": 0.0, "end": 22.398, "text": "XXXXX"},...]}
+    """
     dataList=[]
     for i in range(len(vadResult)):
         start=vadResult[i]['start']
@@ -56,35 +74,14 @@ def getASRResult(waveform_16k, vadResult):
 
 def getVADResult(waveform_16k):
     """
-    取得語意分析結果
+    取得VAD分析結果
     Args:
-        sentence(string): 辨識句子(限512字元)
+        waveform_16k(ndarray): 單聲道音訊 waveform 矩陣
     Return:
-        回傳情意分析結果
+        回傳VAD分析結果: [{'start': 0, 'end': 425952},...]
     """
     
     speech_timestamps = get_speech_timestamps(waveform_16k, model, sampling_rate=16000)
     print(speech_timestamps)
     
     return speech_timestamps
-
-def getAnalyzeResult(base64String):
-    """
-    取得語意分析結果
-    Args:
-        sentence(string): 辨識句子(限512字元)
-    Return:
-        回傳情意分析結果
-    """
-    decoded_data = base64.b64decode(base64String)
-    print(type(decoded_data))
-    samplerate, data = read(io.BytesIO(decoded_data))
-    print(samplerate, data)
-    # Resample data
-    number_of_samples = round(len(data) * float(16000) / samplerate)
-    wav = sps.resample(data, number_of_samples)
-    print(wav)
-    speech_timestamps = get_speech_timestamps(wav, model, sampling_rate=16000)
-    print(speech_timestamps)
-    
-    return jsonify({'results': speech_timestamps})
