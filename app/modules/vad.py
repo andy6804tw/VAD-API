@@ -10,7 +10,7 @@ import numpy as np
 model, utils = torch.hub.load(repo_or_dir='silero-vad-master',
                               model='silero_vad',
                               source = 'local',
-                              force_reload=True)
+                              force_reload=False)
 
 (get_speech_timestamps,
  save_audio,
