@@ -7,15 +7,15 @@ import librosa
 import speech_recognition as sr
 import numpy as np
 
-
-model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
-                              model='silero_vad',
-                              force_reload=True)
-
-# model, utils = torch.hub.load(repo_or_dir='silero-vad-master',
+## download to .cache folder
+# model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
 #                               model='silero_vad',
-#                               source = 'local',
-#                               force_reload=False)
+#                               force_reload=True)
+## run local by path to a local directory
+model, utils = torch.hub.load(repo_or_dir='silero-vad-master',
+                              model='silero_vad',
+                              source = 'local',
+                              force_reload=False)
 
 (get_speech_timestamps,
  save_audio,

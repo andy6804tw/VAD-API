@@ -24,7 +24,7 @@ def silero_vad(onnx=False):
     if onnx:
         model = OnnxWrapper(f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.onnx')
     else:
-        model = init_jit_model(model_path=f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.jit')
+#         model = init_jit_model(model_path=f'{hub_dir}/snakers4_silero-vad_master/files/silero_vad.jit')
         model = init_jit_model(model_path=f'./silero-vad-master/files/silero_vad.jit')
     utils = (get_speech_timestamps,
              save_audio,
