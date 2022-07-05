@@ -39,3 +39,11 @@ def getFileResult():
     vadResult = vadModule.getVADResult(waveform_16k)
     result = vadModule.getASRResult(waveform_16k, vadResult)
     return result
+
+@vadCtrl.route('/test', methods=['POST'])
+def postTest():
+    # 取得 base64 音檔字串
+    insertValues = request.get_json()
+    base64String=insertValues['text']
+    print(base64String)
+    return base64String
