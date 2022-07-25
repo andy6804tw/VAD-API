@@ -1,6 +1,8 @@
 # Voice Activity Detection API
 語音活性檢測（Speech/Voice Activity Detection, SAD/VAD）Python Flask API.
 
+![](https://i.imgur.com/4FJCiys.gif)
+
 ### 測試API
 - [API文件]()
 
